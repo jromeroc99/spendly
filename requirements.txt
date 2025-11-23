@@ -1,3 +1,4 @@
 reflex==0.8.20
 python-dotenv==1.2.1
 pymysql==1.1.2
+bcript==5.00

@@ -3,12 +3,13 @@
 import reflex as rx
 
 from rxconfig import config
-
+from .auth.state.login_state import my_require_login
+from . import auth
 
 class State(rx.State):
     """The app state."""
 
-
+@my_require_login
 def index() -> rx.Component:
     # Welcome Page (Index)
     return rx.container(
@@ -34,3 +35,13 @@ def index() -> rx.Component:
 
 app = rx.App()
 app.add_page(index)
+app.add_page(
+    auth.pages.my_login_page,
+    route=auth.routes.LOGIN_ROUTE,
+    title="Inicio de sesión",
+)
+app.add_page(
+    auth.pages.my_register_page,
+    route=auth.routes.REGISTER_ROUTE,
+    title="Crear una cuenta",
+)
