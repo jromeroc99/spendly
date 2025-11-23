@@ -1,0 +1,41 @@
+services:
+  redis:
+    container_name: redis_app
+    image: redis
+  db:
+    image: mysql:8.0
+    container_name: db_app
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  backend:
+    container_name: backend_app
+    build: 
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+      - db
+
+  frontend:
+    container_name: frontend_app
+    build:
+      dockerfile: web.Dockerfile
+    env_file:
+      - .env
+    ports:
+      - 3000:80
+    depends_on:
+      - backend
+      - db
+
+volumes:
+  mysql_data:
